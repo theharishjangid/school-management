@@ -4,13 +4,9 @@ from .serializers import StudentSerializer, ClassRoomSerializer, StaffSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
-from rest_framework import permissions
 
 
 class StudentList(APIView):
-    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, response):
         students = Student.objects.all()
@@ -26,8 +22,6 @@ class StudentList(APIView):
 
 
 class StudentDetail(APIView):
-    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self, pk):
         try:
@@ -55,8 +49,6 @@ class StudentDetail(APIView):
 
 
 class ClassRoomList(APIView):
-    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, response):
         classrooms = ClassRoom.objects.all()
@@ -72,8 +64,6 @@ class ClassRoomList(APIView):
 
 
 class ClassRoomDetail(APIView):
-    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self, pk):
         try:
@@ -101,8 +91,6 @@ class ClassRoomDetail(APIView):
 
 
 class StaffList(APIView):
-    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, response):
         staffs = Staff.objects.all()
@@ -118,8 +106,6 @@ class StaffList(APIView):
 
 
 class StaffDetail(APIView):
-    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self, pk):
         try:
@@ -147,8 +133,6 @@ class StaffDetail(APIView):
 
 
 class SubjectList(APIView):
-    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, response):
         subjects = Subject.objects.all()
@@ -164,8 +148,6 @@ class SubjectList(APIView):
 
 
 class SubjectDetail(APIView):
-    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self, pk):
         try:
@@ -193,8 +175,6 @@ class SubjectDetail(APIView):
 
 
 class MarksList(APIView):
-    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, response):
         marks = Marks.objects.all()
@@ -210,8 +190,6 @@ class MarksList(APIView):
 
 
 class MarksDetail(APIView):
-    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self, pk):
         try:

@@ -25,8 +25,6 @@ SECRET_KEY = 'w^@v22znzrn+z31ax&+oe7ngn&fxoob6*+m6!@icneby_d!k2z'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-REST_USE_JWT = True
-
 ALLOWED_HOSTS = []
 
 
@@ -41,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'student',
     'rest_framework',
-    'rest_auth',
     'rest_framework.authtoken',
 
 ]
@@ -129,3 +126,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+       'rest_framework.permissions.IsAuthenticated',
+    )
+}
