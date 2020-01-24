@@ -1,28 +1,12 @@
-from .models import Student, ClassRoom, Staff, Subject, Marks
-from rest_framework.serializers import ModelSerializer
+from .models import UserProfile
+from rest_framework import serializers
 
 
-class StudentSerializer(ModelSerializer):
+class UserProfileSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source='pk', read_only=True)
+    username = serializers.CharField(source='user.username')
+    email = serializers.CharField(source='user.email')
+
     class Meta:
-        model = Student
-        fields = '__all__'
-
-class ClassRoomSerializer(ModelSerializer):
-    class Meta:
-        model = ClassRoom
-        fields = '__all__'
-
-class StaffSerializer(ModelSerializer):
-    class Meta:
-        model = Staff
-        fields = '__all__'
-
-class SubjectSerializer(ModelSerializer):
-    class Meta:
-        model = Subject
-        fields = '__all__'
-
-class MarksSerializer(ModelSerializer):
-    class Meta:
-        model = Marks
-        fields = '__all__'
+        model = UserProfile
+        fields = ('id', 'username', 'email', 'date_of_birth', 'phone_no')
