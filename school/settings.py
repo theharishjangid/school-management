@@ -137,3 +137,5 @@ REST_FRAMEWORK = {
        'rest_framework.permissions.IsAuthenticated',
     )
 }
+
+AUTH_PROFILE_MODULE = 'student.UserProfile'

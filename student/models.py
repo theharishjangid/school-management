@@ -6,3 +6,5 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     date_of_birth = models.DateField(verbose_name='DOB')
     phone_no = models.IntegerField()
+
+
