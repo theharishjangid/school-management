@@ -139,3 +139,23 @@ REST_FRAMEWORK = {
 }
 
 AUTH_PROFILE_MODULE = 'student.UserProfile'
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/home/draup/harish/schoolmanagement/school/school/debug.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
