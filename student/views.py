@@ -1,3 +1,4 @@
+import logging
 from .models import UserProfile
 from .serializers import UserProfileSerializer, StudentSerializer
 
@@ -5,6 +6,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import Group, User
+
+logger = logging.getLogger(__name__)
 
 def is_in_group(user, group_name):
     if Group.objects.get(name=group_name).user_set.filter(id=user.id).exists():
@@ -35,6 +38,7 @@ class UserProfileDetail(APIView):
         try:
             return UserProfile.objects.get(pk=pk)
         except UserProfile.DoesNotExist:
+            logger.error("item not found")
             return Response(status=status.HTTP_404_NOT_FOUND)
 
     def get(self, request, pk):
@@ -78,6 +82,7 @@ class StudentDetail(APIView):
             if is_in_group(student, 'student'):
                 return student
         except User.DoesNotExist:
+            logger.error("item not found")
             return Response(status=status.HTTP_404_NOT_FOUND)
 
     def get(self, request, pk):
@@ -103,9 +108,10 @@ class StaffDetail(APIView):
     def get_object(self, pk):
         try:
             teacher = User.objects.get(pk=pk)
-            if is_in_group(teacher,'teacher'):
+            if is_in_group(teacher, 'teacher'):
                 return teacher
         except User.DoesNotExist:
+            logger.error("item not found")
             return Response(status=status.HTTP_404_NOT_FOUND)
 
     def get(self, request, pk):
