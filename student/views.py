@@ -6,6 +6,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import Group, User
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from school.auth import IsStudentReadOnly, IsStudent, IsTeacher, IsTeacherReadOnly, IsReadOnly
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +20,8 @@ def is_in_group(user, group_name):
 
 
 class UserProfileList(APIView):
+
+    permission_classes = [IsAdminUser, IsAuthenticated]
 
     def get(self, response):
         users = UserProfile.objects.all()
@@ -33,6 +37,8 @@ class UserProfileList(APIView):
 
 
 class UserProfileDetail(APIView):
+
+    permission_classes = [IsAdminUser, IsAuthenticated]
 
     def get_object(self, pk):
         try:
@@ -62,6 +68,8 @@ class UserProfileDetail(APIView):
 
 class StudentList(APIView):
 
+    permission_classes = [IsStudent, IsAuthenticated]
+
     def get(self, request):
         student=[user for user in User.objects.all() if is_in_group(user,'student')]
         serializer = StudentSerializer(student, many=True)
@@ -69,12 +77,16 @@ class StudentList(APIView):
 
 class StaffList(APIView):
 
+    permission_classes = [IsTeacher, IsAuthenticated]
+
     def get(self, request):
         staff=[user for user in User.objects.all() if is_in_group(user,'teacher')]
         serializer = StudentSerializer(staff, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class StudentDetail(APIView):
+
+    permission_classes = [IsStudentReadOnly, IsAuthenticated]
 
     def get_object(self, pk):
         try:
@@ -105,6 +117,8 @@ class StudentDetail(APIView):
 
 class StaffDetail(APIView):
 
+    permission_classes = [IsTeacherReadOnly, IsAuthenticated]
+
     def get_object(self, pk):
         try:
             teacher = User.objects.get(pk=pk)
@@ -131,14 +145,5 @@ class StaffDetail(APIView):
         user = self.get_object(pk)
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-
-
-
-
-
-
-
 
 
