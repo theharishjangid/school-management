@@ -7,6 +7,7 @@ class SubjectSerializer(ModelSerializer):
         model = Subject
         fields = '__all__'
 
+
 class SubjectStaffMappingSerializer(ModelSerializer):
     class Meta:
         model = SubjectStaffMapping

@@ -14,9 +14,11 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = UserProfile
         fields = ('id', 'username', 'email', 'date_of_birth', 'phone_no', 'first_name', 'last_name')
 
+
 class StudentSerializer(serializers.ModelSerializer):
     date_of_birth = serializers.DateField(source='userprofile.date_of_birth')
     phone_no = serializers.IntegerField(source='userprofile.phone_no')
+
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email', 'date_of_birth', 'phone_no',]
+        fields = ['first_name', 'last_name', 'username', 'email', 'date_of_birth', 'phone_no']

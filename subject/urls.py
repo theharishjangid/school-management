@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import SubjectList, SubjectDetail, SubjectStaffMappingList, SubjectStaffMappingDetail, MarksList, MarksDetail
+from .views import (SubjectList, SubjectDetail, SubjectStaffMappingList, SubjectStaffMappingDetail, MarksList,
+                    MarksDetail)
 
 urlpatterns = [
     path('subject/', SubjectList.as_view()),

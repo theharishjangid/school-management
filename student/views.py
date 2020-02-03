@@ -7,9 +7,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import Group, User
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from school.auth import IsStudentReadOnly, IsStudent, IsTeacher, IsTeacherReadOnly, IsReadOnly
+from school.auth import IsStudentReadOnly, IsTeacherReadOnly
 
 logger = logging.getLogger(__name__)
+
 
 def is_in_group(user, group_name):
     if Group.objects.get(name=group_name).user_set.filter(id=user.id).exists():
@@ -18,17 +19,15 @@ def is_in_group(user, group_name):
         return False
 
 
-
 class UserProfileList(APIView):
-
     permission_classes = [IsAdminUser, IsAuthenticated]
 
     def get(self, response):
-        users = UserProfile.objects.all()
+        users = UserProfile.objects.select_related('user').all()
         serializer = UserProfileSerializer(users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def post(self,response):
+    def post(self, response):
         serializer = UserProfileSerializer(data=response.data)
         if serializer.is_valid():
             serializer.save()
@@ -37,12 +36,11 @@ class UserProfileList(APIView):
 
 
 class UserProfileDetail(APIView):
-
     permission_classes = [IsAdminUser, IsAuthenticated]
 
     def get_object(self, pk):
         try:
-            return UserProfile.objects.get(pk=pk)
+            return UserProfile.objects.select_related('user').get(pk=pk)
         except UserProfile.DoesNotExist:
             logger.error("item not found")
             return Response(status=status.HTTP_404_NOT_FOUND)
@@ -67,25 +65,24 @@ class UserProfileDetail(APIView):
 
 
 class StudentList(APIView):
-
-    permission_classes = [IsStudent, IsAuthenticated]
+    permission_classes = [IsStudentReadOnly, IsAuthenticated]
 
     def get(self, request):
-        student=[user for user in User.objects.all() if is_in_group(user,'student')]
+        student = [user for user in User.objects.all() if is_in_group(user, 'student')]
         serializer = StudentSerializer(student, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-class StaffList(APIView):
 
-    permission_classes = [IsTeacher, IsAuthenticated]
+class StaffList(APIView):
+    permission_classes = [IsTeacherReadOnly, IsAuthenticated]
 
     def get(self, request):
-        staff=[user for user in User.objects.all() if is_in_group(user,'teacher')]
+        staff = [user for user in User.objects.all() if is_in_group(user, 'teacher')]
         serializer = StudentSerializer(staff, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-class StudentDetail(APIView):
 
+class StudentDetail(APIView):
     permission_classes = [IsStudentReadOnly, IsAuthenticated]
 
     def get_object(self, pk):
@@ -115,8 +112,8 @@ class StudentDetail(APIView):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-class StaffDetail(APIView):
 
+class StaffDetail(APIView):
     permission_classes = [IsTeacherReadOnly, IsAuthenticated]
 
     def get_object(self, pk):
@@ -145,5 +142,3 @@ class StaffDetail(APIView):
         user = self.get_object(pk)
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
